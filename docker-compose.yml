@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: feduampi
+      MYSQL_DATABASE: ticketera
+      MYSQL_USER: ticketera_user
+      MYSQL_PASSWORD: ticketera_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

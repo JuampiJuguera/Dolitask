@@ -9,5 +9,132 @@ datasource db {
 
 model User {
   id    Int    @id @default(autoincrement())
+  name String
+  lastName String
   email String @unique
+  photo String
+  // password
+  enabled Boolean @default(true)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model User_role {
+  id Int @id @default(autoincrement())
+  user  User  @relation(fields: [idUser], references: [id])
+  role  Role  @relation(fields: [idRole], references: [id])
+  idUser   Int
+  idRole   Int
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Role {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model User_project {
+  id Int @id @default(autoincrement())
+  user  User  @relation(fields: [idUser], references: [id])
+  project  Project  @relation(fields: [idProject], references: [id])
+  idUser   Int
+  idProject  Int
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Project {
+  id Int @id @default(autoincrement())
+  name String
+  URL_Drive String
+  enabled Boolean @default(true)
+  StartDate DateTime
+  EndDate DateTime
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Project_documents {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  StartDate DateTime
+  EndDate DateTime
+  enabled Boolean @default(true)
+  // relations
+  idProject  Int
+  project  @relation(fields: [idProject], references: [id])
+  //
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Task {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  StartDate DateTime
+  EndDate DateTime
+  enabled Boolean @default(true)
+  // relations
+  idType  Int
+  idPriority  Int
+  idStatus  Int
+  taskType  @relation(fields: [idType], references: [id])
+  taskPriority  @relation(fields: [idPriority], references: [id])
+  taskStatus  @relation(fields: [idStatus], references: [id])
+  //
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Task_documents {
+  id  Int @id @default(autoincrement())
+  title  String
+  document  String
+  idTask  Int
+  task  @relation(fields: [idTask], references: [id])
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Task_priority {
+  id  Int @id @default(autoincrement())
+  priority  String
+  idTask  Int
+  task  @relation(fields: [idTask], references: [id])
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Task_type {
+  id  Int @id @default(autoincrement())
+  type  String
+  idTask  Int
+  task  @relation(fields: [idTask], references: [id])
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Task_status {
+  id Int @id @default(autoincrement())
+  status  String
+  idTask  Int
+  task  @relation(fields: [idTask], references: [id])
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Task_time {
+  // revisar ESTA nomas
+  id Int @id @default(autoincrement())
+  description String
+  timeSpent DateTime // revisar como vamos a guardar el tiempo
+  // relations
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 }

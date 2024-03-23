@@ -8,12 +8,15 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
+  id  Int    @id @default(autoincrement())
   name String
   lastName String
   email String @unique
-  photo String
-  // password
+  photo String @db.VarChar(255)
+  // relations
+  userRole  User_role[]
+  userProject  User_project[]
+  password String
   enabled Boolean @default(true)
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
@@ -33,6 +36,7 @@ model Role {
   id Int @id @default(autoincrement())
   name String
   description String
+  userRole  User_role[]
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
@@ -51,9 +55,11 @@ model Project {
   id Int @id @default(autoincrement())
   name String
   URL_Drive String
+  userProject  User_project[]
+  projectDocuments  Project_documents[]
   enabled Boolean @default(true)
-  StartDate DateTime
-  EndDate DateTime
+  startDate DateTime
+  endDate DateTime
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
@@ -62,13 +68,11 @@ model Project_documents {
   id Int @id @default(autoincrement())
   name String
   description String
-  StartDate DateTime
-  EndDate DateTime
+  startDate DateTime
+  endDate DateTime
   enabled Boolean @default(true)
-  // relations
   idProject  Int
-  project  @relation(fields: [idProject], references: [id])
-  //
+  project Project @relation(fields: [idProject], references: [id])
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
@@ -77,16 +81,20 @@ model Task {
   id Int @id @default(autoincrement())
   name String
   description String
-  StartDate DateTime
-  EndDate DateTime
+  startDate DateTime
+  endDate DateTime
   enabled Boolean @default(true)
   // relations
-  idType  Int
-  idPriority  Int
-  idStatus  Int
-  taskType  @relation(fields: [idType], references: [id])
-  taskPriority  @relation(fields: [idPriority], references: [id])
-  taskStatus  @relation(fields: [idStatus], references: [id])
+  taskDocuments  Task_documents[]
+  taskType Task_type?
+  taskPriority Task_priority?
+  taskStatus Task_status?
+  //idType  Int
+  //idPriority  Int
+  //idStatus  Int
+  // taskType Task_type @relation(fields: [idType], references: [id])
+  //taskPriority Task_priority @relation(fields: [idPriority], references: [id])
+  //taskStatus Task_status @relation(fields: [idStatus], references: [id])
   //
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
@@ -97,7 +105,7 @@ model Task_documents {
   title  String
   document  String
   idTask  Int
-  task  @relation(fields: [idTask], references: [id])
+  task Task @relation(fields: [idTask], references: [id])
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
@@ -105,8 +113,8 @@ model Task_documents {
 model Task_priority {
   id  Int @id @default(autoincrement())
   priority  String
-  idTask  Int
-  task  @relation(fields: [idTask], references: [id])
+  idTask  Int @unique
+  task Task @relation(fields: [idTask], references: [id])
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
@@ -114,8 +122,8 @@ model Task_priority {
 model Task_type {
   id  Int @id @default(autoincrement())
   type  String
-  idTask  Int
-  task  @relation(fields: [idTask], references: [id])
+  idTask  Int @unique
+  task Task @relation(fields: [idTask], references: [id])
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
@@ -123,8 +131,8 @@ model Task_type {
 model Task_status {
   id Int @id @default(autoincrement())
   status  String
-  idTask  Int
-  task  @relation(fields: [idTask], references: [id])
+  idTask  Int @unique
+  task Task @relation(fields: [idTask], references: [id])
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }

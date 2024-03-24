@@ -57,6 +57,7 @@ model Project {
   URL_Drive String
   userProject  User_project[]
   projectDocuments  Project_documents[]
+  task Task[]
   enabled Boolean @default(true)
   startDate DateTime
   endDate DateTime
@@ -85,16 +86,15 @@ model Task {
   endDate DateTime
   enabled Boolean @default(true)
   // relations
+  idProject Int
   taskDocuments  Task_documents[]
-  taskType Task_type?
-  taskPriority Task_priority?
-  taskStatus Task_status?
-  //idType  Int
-  //idPriority  Int
-  //idStatus  Int
-  // taskType Task_type @relation(fields: [idType], references: [id])
-  //taskPriority Task_priority @relation(fields: [idPriority], references: [id])
-  //taskStatus Task_status @relation(fields: [idStatus], references: [id])
+  idType  Int @unique
+  idPriority  Int @unique
+  idStatus  Int @unique
+  project  Project  @relation(fields: [idProject], references: [id])
+  taskType Task_type @relation(fields: [idType], references: [id])
+  taskPriority Task_priority @relation(fields: [idPriority], references: [id])
+  taskStatus Task_status @relation(fields: [idStatus], references: [id])
   //
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
@@ -114,7 +114,7 @@ model Task_priority {
   id  Int @id @default(autoincrement())
   priority  String
   idTask  Int @unique
-  task Task @relation(fields: [idTask], references: [id])
+  task Task?
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
@@ -123,7 +123,7 @@ model Task_type {
   id  Int @id @default(autoincrement())
   type  String
   idTask  Int @unique
-  task Task @relation(fields: [idTask], references: [id])
+  task Task?
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
@@ -132,7 +132,7 @@ model Task_status {
   id Int @id @default(autoincrement())
   status  String
   idTask  Int @unique
-  task Task @relation(fields: [idTask], references: [id])
+  task Task?
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }

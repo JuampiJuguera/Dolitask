@@ -14,6 +14,7 @@ model User {
   email String @unique
   photo String @db.VarChar(255)
   // relations
+  taskTime Task_time[]
   userRole  User_role[]
   userProject  User_project[]
   password String
@@ -88,6 +89,7 @@ model Task {
   // relations
   idProject Int
   taskDocuments  Task_documents[]
+  taskTime Task_time[]
   idType  Int @unique
   idPriority  Int @unique
   idStatus  Int @unique
@@ -143,6 +145,10 @@ model Task_time {
   description String
   timeSpent DateTime // revisar como vamos a guardar el tiempo
   // relations
+  idTask  Int
+  idUser Int
+  task Task @relation(fields: [idTask], references: [id])
+  user User @relation(fields: [idUser], references: [id])
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }

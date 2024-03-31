@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Users {
   id  Int    @id @default(autoincrement())
   name String
   lastName String
@@ -15,50 +15,50 @@ model User {
   photo String @db.VarChar(255)
   // relations
   taskTime Task_time[]
-  userRole  User_role[]
-  userProject  User_project[]
+  userRole  User_roles[]
+  userProject  User_projects[]
   password String
   enabled Boolean @default(true)
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
 
-model User_role {
+model User_roles {
   id Int @id @default(autoincrement())
-  user  User  @relation(fields: [idUser], references: [id])
-  role  Role  @relation(fields: [idRole], references: [id])
+  user  Users  @relation(fields: [idUser], references: [id])
+  role  Roles  @relation(fields: [idRole], references: [id])
   idUser   Int
   idRole   Int
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
 
-model Role {
+model Roles {
   id Int @id @default(autoincrement())
   name String
   description String
-  userRole  User_role[]
+  userRole  User_roles[]
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
 
-model User_project {
+model User_projects {
   id Int @id @default(autoincrement())
-  user  User  @relation(fields: [idUser], references: [id])
-  project  Project  @relation(fields: [idProject], references: [id])
+  user  Users  @relation(fields: [idUser], references: [id])
+  project  Projects  @relation(fields: [idProject], references: [id])
   idUser   Int
   idProject  Int
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
 
-model Project {
+model Projects {
   id Int @id @default(autoincrement())
   name String
   URL_Drive String
-  userProject  User_project[]
+  userProject  User_projects[]
   projectDocuments  Project_documents[]
-  task Task[]
+  task Tasks[]
   enabled Boolean @default(true)
   startDate DateTime
   endDate DateTime
@@ -74,12 +74,12 @@ model Project_documents {
   endDate DateTime
   enabled Boolean @default(true)
   idProject  Int
-  project Project @relation(fields: [idProject], references: [id])
+  project Projects @relation(fields: [idProject], references: [id])
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
 
-model Task {
+model Tasks {
   id Int @id @default(autoincrement())
   name String
   description String
@@ -93,10 +93,10 @@ model Task {
   idType  Int @unique
   idPriority  Int @unique
   idStatus  Int @unique
-  project  Project  @relation(fields: [idProject], references: [id])
-  taskType Task_type @relation(fields: [idType], references: [id])
-  taskPriority Task_priority @relation(fields: [idPriority], references: [id])
-  taskStatus Task_status @relation(fields: [idStatus], references: [id])
+  project  Projects  @relation(fields: [idProject], references: [id])
+  taskType Task_types @relation(fields: [idType], references: [id])
+  taskPriority Task_priorities @relation(fields: [idPriority], references: [id])
+  taskStatus Task_statuses @relation(fields: [idStatus], references: [id])
   //
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
@@ -107,34 +107,31 @@ model Task_documents {
   title  String
   document  String
   idTask  Int
-  task Task @relation(fields: [idTask], references: [id])
+  task Tasks @relation(fields: [idTask], references: [id])
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
 
-model Task_priority {
+model Task_priorities {
   id  Int @id @default(autoincrement())
   priority  String
-  idTask  Int @unique
-  task Task?
+  task Tasks?
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
 
-model Task_type {
+model Task_types {
   id  Int @id @default(autoincrement())
   type  String
-  idTask  Int @unique
-  task Task?
+  task Tasks?
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
 
-model Task_status {
+model Task_statuses {
   id Int @id @default(autoincrement())
   status  String
-  idTask  Int @unique
-  task Task?
+  task Tasks?
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
@@ -147,8 +144,8 @@ model Task_time {
   // relations
   idTask  Int
   idUser Int
-  task Task @relation(fields: [idTask], references: [id])
-  user User @relation(fields: [idUser], references: [id])
+  task Tasks @relation(fields: [idTask], references: [id])
+  user Users @relation(fields: [idUser], references: [id])
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }

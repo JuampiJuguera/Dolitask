@@ -1,7 +1,6 @@
 import express from "express"
 import cors from "cors"
 import {config} from "dotenv"
-import { PrismaClient } from "@prisma/client"
 import rolesRoutes from './routes/roles.routes'
 import taskStatusesRoutes  from "./routes/taskStatuses.routes"
 

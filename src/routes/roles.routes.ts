@@ -1,13 +1,14 @@
 import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
+import { rolesController } from "../controllers/roles.controller";
 
 const router = Router();
 
-const prisma = new PrismaClient();
+router.get('/roles', rolesController.getRoles);
 
-router.get('/roles', async(req, res) => {
-    const roles = await prisma.roles.findMany();
-    res.json(roles);
-})
+router.post('/createRole', rolesController.createRole);
+
+// router.put('/updateRole', rolesController.updateRole)
+
+//router.delete('/deleteRole', rolesController.deleteRole)
 
 export default router;

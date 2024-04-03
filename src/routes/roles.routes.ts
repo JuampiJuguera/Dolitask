@@ -7,8 +7,8 @@ router.get('/roles', rolesController.getRoles);
 
 router.post('/createRole', rolesController.createRole);
 
-// router.put('/updateRole', rolesController.updateRole)
+router.put('/updateRole/:id', rolesController.updateRole)
 
-//router.delete('/deleteRole', rolesController.deleteRole)
+router.delete('/deleteRole/:id', rolesController.deleteRole)
 
 export default router;

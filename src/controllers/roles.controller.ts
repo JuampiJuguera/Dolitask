@@ -15,7 +15,7 @@ class RolesController {
         }
     };
 
-    public postRole = async (req: Request, res: Response) => {
+    public createRole = async (req: Request, res: Response) => {
         try {
             const {name, description} = req.body;
             const result = await prisma.roles.create({
@@ -30,7 +30,35 @@ class RolesController {
         }
     };
 
-    
+    public updateRole = async (req: Request, res: Response) => {
+        try {
+            const {id} = req.params
+            const {name, description} = req.body;
+            const result = await prisma.roles.update({
+                where: {id: Number(id)},
+                data: {
+                    name,description
+                }
+            });
+            res.json(result);
+        } catch (error) {
+            console.error("Error updating role:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    };
+
+    public deleteRole = async (req: Request, res: Response) => {
+        try {
+            const {id} = req.params
+            const result = await prisma.roles.delete({
+                where: {id: Number(id)}
+            });
+            res.json(result);
+        } catch (error) {
+            console.error("Error deleting role:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    };
 }
 
 export const rolesController = new RolesController();

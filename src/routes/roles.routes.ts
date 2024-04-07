@@ -3,12 +3,12 @@ import { rolesController } from "../controllers/roles.controller";
 
 const router = Router();
 
-router.get('/roles', rolesController.getRoles);
+router.get('/v1/roles', rolesController.getRoles);
 
-router.post('/createRole', rolesController.createRole);
+router.post('/v1/createRole', rolesController.createRole);
 
-router.put('/updateRole/:id', rolesController.updateRole)
+router.put('/v1/updateRole/:id', rolesController.updateRole)
 
-router.delete('/deleteRole/:id', rolesController.deleteRole)
+router.delete('/v1/deleteRole/:id', rolesController.deleteRole)
 
 export default router;

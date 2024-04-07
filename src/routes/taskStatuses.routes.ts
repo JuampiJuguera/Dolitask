@@ -1,11 +1,9 @@
 import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../utils/prisma";
 
 const router = Router();
 
-const prisma = new PrismaClient();
-
-router.get('/taskStatuses', async(req, res) => {
+router.get('/v1/taskStatuses', async(req, res) => {
     const taskStatuses = await prisma.task_statuses.findMany();
     res.json(taskStatuses);
 })

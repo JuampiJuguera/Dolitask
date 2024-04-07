@@ -11,6 +11,7 @@ model Users {
   id  Int    @id @default(autoincrement())
   name String
   lastName String
+  username String @unique
   email String @unique
   photo String @db.VarChar(255)
   // relations

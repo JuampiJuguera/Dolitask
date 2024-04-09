@@ -6,11 +6,12 @@ class AuthController {
     public userRegister = async (req: Request, res: Response) => {
         try {
             const userData = req.body;
-            const registrationSuccessful = await authService.userRegister(userData);
-            if (registrationSuccessful) {
-                return res.json({ message: "User registered successfully" });
-            }
-            return res.status(400).json({ error: "Username or email already exists" });
+            const result = await authService.userRegister(userData);
+            if(result.code != 200) return res.status(result.code).json({
+                message: result.message,
+                success: false
+            })
+            return res.status(200).json({ message: result.message, user: result.user ,success: true })
         } catch (error) {
             console.error("Error at register user:", error);
             return res.status(500).json({ error: "Internal server error" });

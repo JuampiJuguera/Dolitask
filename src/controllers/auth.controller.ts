@@ -11,7 +11,7 @@ class AuthController {
                 message: result.message,
                 success: false
             })
-            return res.status(200).json({ message: result.message, user: result.user, accessToken: result.accessToken, refreshToken: result.refreshToken ,success: true })
+            return res.status(200).json({ message: result.message, user: result.user, success: true })
         } catch (error) {
             console.error("Error at register user:", error);
             return res.status(500).json({ error: "Internal server error" });
@@ -26,7 +26,7 @@ class AuthController {
                 message: result.message,
                 success: false
             })
-            return res.status(200).json({ message: result.message, user: result.user, accessToken: result.accessToken, refreshToken: result.refreshToken ,success: true })
+            return res.status(200).json({ message: result.message, user: result.user, token: result.token, success: true })
         } catch (error) {
             console.error("Error retrieving roles:", error);
             res.status(500).json({ error: "Internal server error" });

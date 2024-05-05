@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { authService } from '../services/auth.service';
+import { CustomRequest } from '../types/express';
 
 class AuthController {
 
@@ -28,8 +29,17 @@ class AuthController {
             })
             return res.status(200).json({ message: result.message, user: result.user, token: result.token, success: true })
         } catch (error) {
-            console.error("Error retrieving roles:", error);
+            console.error("Error at login: ", error);
             res.status(500).json({ error: "Internal server error" });
+        }
+    };
+
+    public userInfo = async (req: CustomRequest, res: Response) => {
+        try {
+            return res.status(200).json(req.user)
+        } catch (error) {
+            console.error("Authorization Error: ", error);
+            return res.status(500).json({ error: "Internal server error" });
         }
     };
 

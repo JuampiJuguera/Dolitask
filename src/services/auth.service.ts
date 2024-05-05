@@ -8,17 +8,12 @@ class AuthService {
         try {
 
             if (!userData.email || !userData.password || !userData.username || !userData.name || !userData.lastName) return { code: 400, message: 'You must provide Name, lastname, Username, Email and Password' };
-            // check if username exists in DB
             const usernameExists = await usersService.findUserByUsername(userData.username);
             if (usernameExists) return { code: 409, message: 'Username already in use' };
-            // check if email exists in DB
             const emailExists = await usersService.findUserByEmail(userData.email);
             if (emailExists) return { code: 409, message: 'Email already in use' };
-            // hash password
             const user = await usersService.createUserByEmailAndPassword(userData);
             
-            
-    
             return { code: 200, message: 'User registered successfully', user: user};
         } catch (error) {
             console.error('Error in user registration:', error);

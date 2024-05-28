@@ -13,7 +13,7 @@ model Users {
   lastName String
   username String @unique
   email String @unique
-  photo String @db.VarChar(255)
+  photo String? @db.VarChar(255)
   taskTime Task_time[]
   userRole  User_roles[]
   userProject  User_projects[]
@@ -36,8 +36,9 @@ model User_roles {
 model Roles {
   id Int @id @default(autoincrement())
   name String
-  description String
+  description String?
   userRole  User_roles[]
+  rolePermission  Role_permissions[]
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
@@ -52,16 +53,35 @@ model User_projects {
   updatedAt  DateTime   @updatedAt
 }
 
+model Permissions {
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+  rolePermission  Role_permissions[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Role_permissions {
+  id Int @id @default(autoincrement())
+  role  Roles  @relation(fields: [idRole], references: [id])
+  permission  Permissions  @relation(fields: [idPermission], references: [id])
+  idRole   Int
+  idPermission  Int
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
 model Projects {
   id Int @id @default(autoincrement())
   name String
-  URL_Drive String
+  URL_Drive String?
   userProject  User_projects[]
   projectDocuments  Project_documents[]
   task Tasks[]
   enabled Boolean @default(true)
-  startDate DateTime
-  endDate DateTime
+  startDate DateTime?
+  endDate DateTime?
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
@@ -83,8 +103,8 @@ model Tasks {
   id Int @id @default(autoincrement())
   name String
   description String
-  startDate DateTime
-  endDate DateTime
+  startDate DateTime?
+  endDate DateTime?
   enabled Boolean @default(true)
   // relations
   idProject Int
@@ -139,7 +159,7 @@ model Task_statuses {
 model Task_time {
   // revisar ESTA nomas
   id Int @id @default(autoincrement())
-  description String
+  description String?
   timeSpent DateTime // revisar como vamos a guardar el tiempo
   // relations
   idTask  Int

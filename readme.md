@@ -21,6 +21,10 @@ Currently, the project includes or will include:
 - Document upload for tasks
 - Task notifications
 
+## Considerations
+
+At present, the front-end is a mock-up of what the project was originally intended to be. It is not connected to the API, and I need to either modify it to adapt to the current project requirements or completely redo it. I have not yet made a decision on this.
+
 ## How to Run the Project
 
 **Clone the repository**

@@ -23,17 +23,19 @@ Currently, the project includes or will include:
 
 ## How to Run the Project
 
-1. **Clone the repository**
+**Clone the repository**
     ```sh
     git clone https://github.com/JuampiJuguera/Dolitask.git
     ```
 
-2. **Install dependencies**
+### API
+
+1. **Install dependencies**
     ```sh
     npm install
     ```
 
-3. **Set up the environment variables**
+2. **Set up the environment variables**
     Create a `.env` file in the root directory and configure the necessary environment variables:
     ```plaintext
     DATABASE_URL=""
@@ -43,18 +45,32 @@ Currently, the project includes or will include:
     PORT = // port where you want to run your server
     ```
 
-4. **Run the Prisma migrations**
+3. **Run the Prisma migrations**
     ```sh
     npm prisma migrate
     ```
 
-5. **Build and run the project using Docker**
+4. **Build and run the database using Docker**
     ```sh
     docker-compose up --build
     ```
 
-6. **Access the application**
-    Open your browser and navigate to `http://localhost:3000` to see the application in action.
+5. **Run the API server**
+    ```sh
+    npm run dev
+    ```
+
+### WEB
+
+1. **Go to frontend folder**
+    ```sh
+    cd frontend
+    ```
+
+2. **Run the frontend**
+    ```sh
+    npm run dev
+    ```
 
 ## Upcoming Features
 

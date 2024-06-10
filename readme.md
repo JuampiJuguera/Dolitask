@@ -35,7 +35,7 @@ At present, the front-end is a mock-up of what the project was originally intend
 ### API
 
 1. **Install dependencies**
-    ```sh
+    ```
     npm install
     ```
 

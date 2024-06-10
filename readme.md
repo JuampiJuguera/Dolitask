@@ -67,7 +67,12 @@ Currently, the project includes or will include:
     cd frontend
     ```
 
-2. **Run the frontend**
+2. **Install dependencies**
+    ```sh
+    npm install
+    ```
+
+3. **Run the frontend**
     ```sh
     npm run dev
     ```

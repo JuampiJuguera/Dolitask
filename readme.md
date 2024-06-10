@@ -28,7 +28,7 @@ At present, the front-end is a mock-up of what the project was originally intend
 ## How to Run the Project
 
 **Clone the repository**
-    ```sh
+    ```
     git clone https://github.com/JuampiJuguera/Dolitask.git
     ```
 

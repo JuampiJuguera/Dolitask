@@ -60,7 +60,7 @@ class UsersService {
         });
 
         if (!userRoles) throw new Error("Error getting roles or permissions"); 
-        // const roles = userRoles.map((ur) => ur.role); 
+        // const roles = userRoles.map((ur) => ur.role);
         const permissions = userRoles.flatMap(userRole => 
             userRole.role.rolePermission.map(rp => rp.permission.name)
         );

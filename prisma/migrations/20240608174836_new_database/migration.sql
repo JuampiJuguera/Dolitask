@@ -3,13 +3,15 @@ CREATE TABLE `Users` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
     `lastName` VARCHAR(191) NOT NULL,
+    `username` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
-    `photo` VARCHAR(255) NOT NULL,
+    `photo` VARCHAR(255) NULL,
     `password` VARCHAR(191) NOT NULL,
     `enabled` BOOLEAN NOT NULL DEFAULT true,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
+    UNIQUE INDEX `Users_username_key`(`username`),
     UNIQUE INDEX `Users_email_key`(`email`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -29,7 +31,7 @@ CREATE TABLE `User_roles` (
 CREATE TABLE `Roles` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
-    `description` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -48,13 +50,10 @@ CREATE TABLE `User_projects` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Projects` (
+CREATE TABLE `Permissions` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
-    `URL_Drive` VARCHAR(191) NOT NULL,
-    `enabled` BOOLEAN NOT NULL DEFAULT true,
-    `startDate` DATETIME(3) NOT NULL,
-    `endDate` DATETIME(3) NOT NULL,
+    `description` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -62,14 +61,35 @@ CREATE TABLE `Projects` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Project_documents` (
+CREATE TABLE `Role_permissions` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `idRole` INTEGER NOT NULL,
+    `idPermission` INTEGER NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Projects` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
-    `description` VARCHAR(191) NOT NULL,
-    `startDate` DATETIME(3) NOT NULL,
-    `endDate` DATETIME(3) NOT NULL,
+    `URL_Drive` VARCHAR(191) NULL,
     `enabled` BOOLEAN NOT NULL DEFAULT true,
-    `idProject` INTEGER NOT NULL,
+    `startDate` DATETIME(3) NULL,
+    `endDate` DATETIME(3) NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `User_tasks` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `idUser` INTEGER NOT NULL,
+    `idTask` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -81,8 +101,8 @@ CREATE TABLE `Tasks` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
     `description` VARCHAR(191) NOT NULL,
-    `startDate` DATETIME(3) NOT NULL,
-    `endDate` DATETIME(3) NOT NULL,
+    `startDate` DATETIME(3) NULL,
+    `endDate` DATETIME(3) NULL,
     `enabled` BOOLEAN NOT NULL DEFAULT true,
     `idProject` INTEGER NOT NULL,
     `idType` INTEGER NOT NULL,
@@ -91,9 +111,6 @@ CREATE TABLE `Tasks` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `Tasks_idType_key`(`idType`),
-    UNIQUE INDEX `Tasks_idPriority_key`(`idPriority`),
-    UNIQUE INDEX `Tasks_idStatus_key`(`idStatus`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -142,7 +159,7 @@ CREATE TABLE `Task_statuses` (
 -- CreateTable
 CREATE TABLE `Task_time` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `description` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(191) NULL,
     `timeSpent` DATETIME(3) NOT NULL,
     `idTask` INTEGER NOT NULL,
     `idUser` INTEGER NOT NULL,
@@ -165,7 +182,16 @@ ALTER TABLE `User_projects` ADD CONSTRAINT `User_projects_idUser_fkey` FOREIGN K
 ALTER TABLE `User_projects` ADD CONSTRAINT `User_projects_idProject_fkey` FOREIGN KEY (`idProject`) REFERENCES `Projects`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Project_documents` ADD CONSTRAINT `Project_documents_idProject_fkey` FOREIGN KEY (`idProject`) REFERENCES `Projects`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Role_permissions` ADD CONSTRAINT `Role_permissions_idRole_fkey` FOREIGN KEY (`idRole`) REFERENCES `Roles`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Role_permissions` ADD CONSTRAINT `Role_permissions_idPermission_fkey` FOREIGN KEY (`idPermission`) REFERENCES `Permissions`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `User_tasks` ADD CONSTRAINT `User_tasks_idUser_fkey` FOREIGN KEY (`idUser`) REFERENCES `Users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `User_tasks` ADD CONSTRAINT `User_tasks_idTask_fkey` FOREIGN KEY (`idTask`) REFERENCES `Tasks`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Tasks` ADD CONSTRAINT `Tasks_idProject_fkey` FOREIGN KEY (`idProject`) REFERENCES `Projects`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

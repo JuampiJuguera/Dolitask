@@ -6,11 +6,12 @@ import { usersService } from "../services/users.service";
 class AuthMiddleware {
 
     public authMiddleware = async(req: CustomRequest, res: Response, next: NextFunction) => {
-        const token = req.headers.authorization;
+        let token = req.headers.authorization;
         if (!token) return res.status(403).json({ code: 403, message: 'Unauthorized: No token provided' });;
         try {
             const accessTokenSecret = process.env.JWT_ACCESS_SECRET;
             if (!accessTokenSecret) throw new Error("JWT_ACCESS_SECRET is not defined");
+            token = token.split(" ")[1];
             const payload = jwt.verify(token, accessTokenSecret) as any;
             const idUser = payload.idUser;
             if (!idUser) return res.status(403).json({ code: 403, message: 'idUser not found in token payload' });

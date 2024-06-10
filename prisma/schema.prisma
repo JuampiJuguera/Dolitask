@@ -17,10 +17,11 @@ model Users {
   taskTime Task_time[]
   userRole  User_roles[]
   userProject  User_projects[]
+  user_tasks  User_tasks[]
   password String
   enabled Boolean @default(true)
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model User_roles {
@@ -30,7 +31,7 @@ model User_roles {
   idUser   Int
   idRole   Int
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Roles {
@@ -40,7 +41,7 @@ model Roles {
   userRole  User_roles[]
   rolePermission  Role_permissions[]
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model User_projects {
@@ -50,7 +51,7 @@ model User_projects {
   idUser   Int
   idProject  Int
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Permissions {
@@ -59,7 +60,7 @@ model Permissions {
   description String?
   rolePermission  Role_permissions[]
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Role_permissions {
@@ -69,7 +70,7 @@ model Role_permissions {
   idRole   Int
   idPermission  Int
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Projects {
@@ -77,26 +78,36 @@ model Projects {
   name String
   URL_Drive String?
   userProject  User_projects[]
-  projectDocuments  Project_documents[]
+  //projectDocuments  Project_documents[]
   task Tasks[]
   enabled Boolean @default(true)
   startDate DateTime?
   endDate DateTime?
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
-model Project_documents {
+// model Project_documents {
+//   id Int @id @default(autoincrement())
+//   name String
+//   description String
+//   startDate DateTime
+//   endDate DateTime
+//   enabled Boolean @default(true)
+//   idProject  Int
+//   project Projects @relation(fields: [idProject], references: [id])
+//   createdAt  DateTime   @default(now())
+//   updatedAt DateTime @default(now()) @updatedAt
+// }
+
+model User_tasks {
   id Int @id @default(autoincrement())
-  name String
-  description String
-  startDate DateTime
-  endDate DateTime
-  enabled Boolean @default(true)
-  idProject  Int
-  project Projects @relation(fields: [idProject], references: [id])
+  user  Users  @relation(fields: [idUser], references: [id])
+  task  Tasks  @relation(fields: [idTask], references: [id])
+  idUser   Int
+  idTask  Int
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Tasks {
@@ -108,18 +119,19 @@ model Tasks {
   enabled Boolean @default(true)
   // relations
   idProject Int
+  user_tasks  User_tasks[]
   taskDocuments  Task_documents[]
   taskTime Task_time[]
-  idType  Int @unique
-  idPriority  Int @unique
-  idStatus  Int @unique
+  idType  Int
+  idPriority  Int
+  idStatus  Int
   project  Projects  @relation(fields: [idProject], references: [id])
   taskType Task_types @relation(fields: [idType], references: [id])
   taskPriority Task_priorities @relation(fields: [idPriority], references: [id])
   taskStatus Task_statuses @relation(fields: [idStatus], references: [id])
   //
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Task_documents {
@@ -129,31 +141,31 @@ model Task_documents {
   idTask  Int
   task Tasks @relation(fields: [idTask], references: [id])
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Task_priorities {
   id  Int @id @default(autoincrement())
   priority  String
-  task Tasks?
+  task Tasks[]
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Task_types {
   id  Int @id @default(autoincrement())
   type  String
-  task Tasks?
+  task Tasks[]
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Task_statuses {
   id Int @id @default(autoincrement())
   status  String
-  task Tasks?
+  task Tasks[]
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Task_time {
@@ -167,5 +179,5 @@ model Task_time {
   task Tasks @relation(fields: [idTask], references: [id])
   user Users @relation(fields: [idUser], references: [id])
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
